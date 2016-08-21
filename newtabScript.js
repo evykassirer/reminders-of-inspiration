@@ -41,7 +41,7 @@ function getRandomIntInclusive(min, max) {
 
 function displayInspiration(insp) {
     if (insp.type === "image") {
-        $("#inspiration-content").html("<img src="+insp.content+"/>");
+        $("#inspiration-content").html("<img src="+insp.content+" />");
     } else {
         $("#inspiration-content").html("<span>"+insp.content+"</span>");
     }    

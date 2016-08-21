@@ -43,7 +43,7 @@ function addContent(event) {
 
         // add confirmation text above the form
         if (contentType === "image") {
-            $("#confirmation").html("Added new image <img src="+content+"/>");
+            $("#confirmation").html("Added new image <img src="+content+" />");
         } else {
             $("#confirmation").html("<span> Added new text \""+content+"\"</span>");
         }  
