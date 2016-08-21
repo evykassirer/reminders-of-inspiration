@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <title>Add content</title>
+	  <script src=jquery-1.7.1.js></script>
+	  <script src="addInspScript.js"></script>
+	  <link rel="stylesheet" type="text/css" href="skeleton.css">
+	  <link rel="stylesheet" type="text/css" href="normalize.css">
+	  <link rel="stylesheet" type="text/css" href="style.css">
+
+	</head>
+	<body>
+		<div class="container">
+			<h1>Add new inspiration</h1>
+
+			<div id="confirmation"></div>
+
+			<form action="/" id="addContent">
+				<div>
+					<label >Content (text or a link to an image)</label>
+					<textarea name="content" class="u-full-width"></textarea>
+				</div>
+				<div>
+					<label>Type of content:</label>
+					<label>
+						<input type="radio" name="content-type" value="text" checked> <span class="label-body">Text</span>
+					</label>
+					<label>
+					  	<input type="radio" name="content-type" value="image"> <span class="label-body">Image</span>
+					</label>
+				</div>
+				<div>
+					<input type="submit" class="button-primary submit-button" value="add inspiration">
+					<a class="button" href="newtab.html">Go back</a>
+				</div>
+			</form>
+		</div>
+	</body>
+</html>

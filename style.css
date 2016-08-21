@@ -1,0 +1,36 @@
+form div {
+	padding: 10px 0;
+}
+
+#confirmation {
+	color: green;
+}
+
+#confirmation img {
+	max-height: 50px;
+}
+
+
+
+.newtab-container {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.newtab-buttons {
+	margin-top: 20px;
+}
+
+#inspiration-content {
+	margin-bottom: 170px;
+}
+
+#inspiration-content span {
+	display: inline-block;
+	font-size: 30px;
+	margin: 150px;
+}
+
+#inspiration-content img {
+	max-height: 600px;
+}

@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "Reminders of Inspiration",
+  "description": "A new tab page that displays your own custom inspirational quotations and images",
+  "version": "1.0",
+
+  "chrome_url_overrides" : {
+    "newtab": "newtab.html"
+  },
+
+  "permissions": [
+    "storage"
+  ]
+}
