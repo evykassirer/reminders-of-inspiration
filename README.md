@@ -7,12 +7,7 @@ extension!
 Add your own custom content, and whenever you open a new tab, it will display
 one of your reminders of inspiration.
 
-Not on the chrome extension store right now, but you can install it by:
-
-1. cloning this repository locally
-2. going to chrome://extensions/
-3. clicking "Load unpacked extension..."
-4. selecting this folder
+[Click here to get it for free on the chrome web store!](https://chrome.google.com/webstore/detail/reminders-of-inspiration/bfjpeobppojibdjcnccgdpahdcbbmicg)
 
 ### Screenshots:
 
