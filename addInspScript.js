@@ -41,12 +41,16 @@ function addContent(event) {
         newContent["maxKey"] = newKeyStr.toString();
         StorageArea.set(newContent);
 
-        // add confirmation text above the form
-        if (contentType === "image") {
-            $("#confirmation").html("Added new image <img src="+content+" />");
-        } else {
-            $("#confirmation").html("<span> Added new text \""+content+"\"</span>");
-        }  
     });
+
+    // add confirmation text above the form
+    if (contentType === "image") {
+        $("#confirmation").html("Added new image <img src="+content+" />");
+    } else {
+        $("#confirmation").html("<span> Added new text \""+content+"\"</span>");
+    }
+
+    // clear the form
+    $form.find('textarea[name="content"]').val('');
 };
 
