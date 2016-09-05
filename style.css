@@ -34,3 +34,10 @@ form div {
 #inspiration-content img {
 	max-height: 600px;
 }
+
+#remove-insp {
+	margin-left: -3px;
+	font-size: 9px;
+	height: 34px;
+	line-height: 34px;
+}
