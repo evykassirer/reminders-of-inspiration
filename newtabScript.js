@@ -23,14 +23,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     var currentKeyStr = getRandomIntInclusive(
                         1, maxKeyInt).toString();
                     StorageArea.set({"currentKey": currentKeyStr});
-                    StorageArea.get(currentKeyStr,
-                        (obj) => displayInspiration(obj[currentKeyStr]));
+                    StorageArea.get(currentKeyStr, (obj) => {
+                        displayInspiration(obj[currentKeyStr]);
+                        var currentObj = obj[currentKeyStr];
+                        $("#remove-insp").click(() => deleteInsp(currentObj));
+                    });
                 }
             });
         }
     });
 
-    $("#remove-insp").click(removeKey);
 });
 
 function getRandomIntInclusive(min, max) {
@@ -47,12 +49,29 @@ function displayInspiration(insp) {
     }    
 };
 
+function deleteInsp(insp) {
+    // the key of the object we want to delete
+    StorageArea.get("currentKey", (currentKeyObj) => {
+        var currentKeyStr = currentKeyObj["currentKey"];
+        StorageArea.get(currentKeyStr, (obj) => {
+            // double check that the key hasn't been reassigned to other
+            // content (possible if there was a delete after the page loaded)
+            if (obj[currentKeyStr] && (obj[currentKeyStr].content === insp.content)) {
+                removeKey(currentKeyStr);
+            } else {
+                // if it was already deleted, just reload
+                location.reload();
+            }
+        });
+    });
+}
+
 // I think my two options are to keep it all in one array, which will take
 // longer to fetch an item, or to store them with keys from 1 to n, which I
 // decided to do instead. Because I took this route, when I remove one I need
 // to shift something else to its place. I don't have to keep them in the same
 // order, so I can just bring the last item to the slot I'm deleting from.
-function removeKey() {
+function removeKey(currentKeyStr) {
     StorageArea = chrome.storage.sync;
 
     // the max key with something stored there
@@ -63,18 +82,14 @@ function removeKey() {
         // When there's only one thing stored, there's nothing else to put in
         // that slot, so skip this part and just delete it.
         if (maxKeyInt > 1) {
-            // the key of the object we want to delete
-            StorageArea.get("currentKey", (currentKeyObj) => {
-                var currentKeyStr = currentKeyObj["currentKey"];
-                // Get the inspriation stored with the max key and move to
-                // current position, overriding (and therefore deleting) the
-                // current inspiration.
-                StorageArea.get(maxKeyStr, (maxInspObj) => {
-                    var replacement = {};
-                    replacement[currentKeyStr] = maxInspObj[maxKeyStr];
-                    StorageArea.set(replacement);
-                });
-            });            
+            // Get the inspriation stored with the max key and move to
+            // current position, overriding (and therefore deleting) the
+            // current inspiration.
+            StorageArea.get(maxKeyStr, (maxInspObj) => {
+                var replacement = {};
+                replacement[currentKeyStr] = maxInspObj[maxKeyStr];
+                StorageArea.set(replacement);
+            });
         }
 
         StorageArea.remove(maxKeyStr);
