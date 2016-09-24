@@ -36,9 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+    console.log(max);
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function displayInspiration(insp) {
@@ -46,7 +47,7 @@ function displayInspiration(insp) {
         $("#inspiration-content").html("<img src="+insp.content+" />");
     } else {
         $("#inspiration-content").html("<span>"+insp.content+"</span>");
-    }    
+    }
 };
 
 function deleteInsp(insp) {
@@ -93,7 +94,7 @@ function removeKey(currentKeyStr) {
         }
 
         StorageArea.remove(maxKeyStr);
-        
+
         // decrement the key so we can't pick it anymore.
         var newMaxKeyInt = parseInt(maxKeyStr) - 1;
         StorageArea.set({"maxKey": newMaxKeyInt.toString()});
