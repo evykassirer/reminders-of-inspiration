@@ -77,3 +77,7 @@ input[type=checkbox]:checked + label {
 	display:inline-block;
 	padding: 0 0 0 0px;
 }
+
+.container {
+	margin-left: 80px;
+}

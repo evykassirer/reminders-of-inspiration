@@ -37,10 +37,8 @@ function checkContent(event) {
         if (!r) {
             return;
         }
-    } else {
-        addContent(content, contentType, $form);
     }
-
+    addContent(content, contentType, $form);
 }
 
 
