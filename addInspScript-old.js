@@ -3,10 +3,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     StorageArea = chrome.storage.sync;
 
-    // If there is content stored yet, initialize to []
+    // If there is no max key set yet, initialize it. This has to be done
+    // before anything in the app will do anything.
     StorageArea.getBytesInUse(null, (bytes) => {
         if (bytes === 0) {
-            StorageArea.set({"contentArray": []});
+            StorageArea.set({"maxKey": 0});
         }
     });
 
@@ -45,13 +46,19 @@ function addContent(content, contentType, $form) {
     StorageArea = chrome.storage.sync;
 
     // store the new content with a new, higher, key
-    StorageArea.get("contentArray", (obj) => {
-        var contentArray = obj["contentArray"];
-        contentArray.push({
+    StorageArea.get("maxKey", (items) => {
+        // the key has to be a string
+        var newKeyInt = parseInt(items["maxKey"]) + 1;
+        var newKeyStr = newKeyInt.toString();
+
+        newContent = {};
+        newContent[newKeyStr] = {
             content: content,
             type: contentType,
-        });
-        StorageArea.set({"contentArray": contentArray});
+        }
+        newContent["maxKey"] = newKeyStr.toString();
+        StorageArea.set(newContent);
+
     });
 
 

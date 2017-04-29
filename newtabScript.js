@@ -4,30 +4,28 @@
 document.addEventListener('DOMContentLoaded', function () {
     StorageArea = chrome.storage.sync;
 
-    // First check if we have stored the max key (the number of objects submitted)
+    // First check if we have stored any content yet
     StorageArea.getBytesInUse(null, (bytes) => {
         if (bytes === 0) {
-            console.log("There's no max key being stored");
+            console.log("There's no content");
             $("#remove-insp").hide();
         } else {
             // Then see if we've added anything so far
-            StorageArea.get("maxKey", (obj) => {
-                maxKeyInt = parseInt(obj["maxKey"]);
-                if (maxKeyInt === 0) {
-                    console.log("Need to add some stuff first " +
-                                "(the key is still 0)");
+            StorageArea.get("contentArray", (obj) => {
+                const contentArray = obj["contentArray"]
+                if (!contentArray || contentArray.length === 0) {
+                    console.log("There's no content");
                     $("#remove-insp").hide();
                 }
                 else {
                     // pick a random number to select that inspiration
-                    var currentKeyStr = getRandomIntInclusive(
-                        1, maxKeyInt).toString();
-                    StorageArea.set({"currentKey": currentKeyStr});
-                    StorageArea.get(currentKeyStr, (obj) => {
-                        displayInspiration(obj[currentKeyStr]);
-                        var currentObj = obj[currentKeyStr];
-                        $("#remove-insp").click(() => deleteInsp(currentObj));
-                    });
+                    var randomIndex = getRandomIntInclusive(
+                        0, contentArray.length-1);
+                    // this is stored to be used in a safe check when deleting
+                    StorageArea.set({"currentKey": randomIndex});
+                    var currentObj = contentArray[randomIndex];
+                    displayInspiration(currentObj);
+                    $("#remove-insp").click(() => deleteInsp(currentObj));
                 }
             });
         }
@@ -36,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function getRandomIntInclusive(min, max) {
-    console.log(max);
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -53,12 +50,14 @@ function displayInspiration(insp) {
 function deleteInsp(insp) {
     // the key of the object we want to delete
     StorageArea.get("currentKey", (currentKeyObj) => {
-        var currentKeyStr = currentKeyObj["currentKey"];
-        StorageArea.get(currentKeyStr, (obj) => {
+        const currentKey = currentKeyObj["currentKey"];
+        StorageArea.get("contentArray", (contentArrayObj) => {
+            const contentArray = contentArrayObj["contentArray"];
             // double check that the key hasn't been reassigned to other
             // content (possible if there was a delete after the page loaded)
-            if (obj[currentKeyStr] && (obj[currentKeyStr].content === insp.content)) {
-                removeKey(currentKeyStr);
+            if (contentArray[currentKey] &&
+                contentArray[currentKey].content === insp.content) {
+                removeKey(currentKey);
             } else {
                 // if it was already deleted, just reload
                 location.reload();
@@ -67,37 +66,14 @@ function deleteInsp(insp) {
     });
 }
 
-// I think my two options are to keep it all in one array, which will take
-// longer to fetch an item, or to store them with keys from 1 to n, which I
-// decided to do instead. Because I took this route, when I remove one I need
-// to shift something else to its place. I don't have to keep them in the same
-// order, so I can just bring the last item to the slot I'm deleting from.
-function removeKey(currentKeyStr) {
+function removeKey(currentKey) {
     StorageArea = chrome.storage.sync;
 
     // the max key with something stored there
-    StorageArea.get("maxKey", (obj) => {
-        // keys must be stored as strings
-        var maxKeyStr = obj["maxKey"];
-        var maxKeyInt = parseInt(maxKeyStr);
-        // When there's only one thing stored, there's nothing else to put in
-        // that slot, so skip this part and just delete it.
-        if (maxKeyInt > 1) {
-            // Get the inspriation stored with the max key and move to
-            // current position, overriding (and therefore deleting) the
-            // current inspiration.
-            StorageArea.get(maxKeyStr, (maxInspObj) => {
-                var replacement = {};
-                replacement[currentKeyStr] = maxInspObj[maxKeyStr];
-                StorageArea.set(replacement);
-            });
-        }
-
-        StorageArea.remove(maxKeyStr);
-
-        // decrement the key so we can't pick it anymore.
-        var newMaxKeyInt = parseInt(maxKeyStr) - 1;
-        StorageArea.set({"maxKey": newMaxKeyInt.toString()});
+    StorageArea.get("contentArray", (obj) => {
+        var contentArray = obj["contentArray"];
+        contentArray.splice(currentKey, 1);
+        StorageArea.set({"contentArray": contentArray});
         location.reload();
     });
 }
