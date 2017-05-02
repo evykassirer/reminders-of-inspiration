@@ -35,10 +35,11 @@ function migrateContent(i, maxKey, contentArray) {
         const insp = obj[key];
         contentArray.push(insp);
         if (i < maxKey) {
-            return migrateContent(i+1, maxKey, contentArray);
+            migrateContent(i+1, maxKey, contentArray);
         }
         else {
             StorageArea.set({"contentArray": contentArray});
+            location.reload();
         }
     });
 }
