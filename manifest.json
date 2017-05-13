@@ -4,14 +4,14 @@
   "name": "Reminders of Inspiration",
   "short_name": "Reminders",
   "description": "A new tab page that displays your own custom inspirational quotations and images",
-  "version": "1.2",
+  "version": "1.3",
 
   "icons": {
     "128": "bulb.png"
   },
 
   "chrome_url_overrides" : {
-    "newtab": "temp.html"
+    "newtab": "newtab.html"
   },
 
   "permissions": [
